@@ -1,0 +1,20 @@
+extends layout
+
+block content
+  h1 Users
+
+  table
+    thead
+      tr
+        th ID
+        th Name
+        th Created At
+        th Updated At
+    tbody
+      each user in users
+        tr
+          td= user.id
+          td= user.name
+          td= dayjs(user.createdAt).tz('Asia/Tokyo').format()
+          td= dayjs(user.updatedAt).tz('Asia/Tokyo').format()
+

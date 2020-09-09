@@ -1,0 +1,24 @@
+extends layout
+
+block content
+  h1 Works
+
+  table
+    thead
+      tr
+        th ID
+        th Name
+        th Started At
+        th Finished At
+        th At Office
+        th On Work
+    tbody
+      each work in works
+        tr
+          td= work.id
+          td= work.User.name
+          td= dayjs(work.startedAt).tz('Asia/Tokyo').format()
+          td= dayjs(work.finishedAt).tz('Asia/Tokyo').format()
+          td= work.atOffice
+          td= work.onWork
+
