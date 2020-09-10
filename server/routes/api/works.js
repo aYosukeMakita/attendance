@@ -18,25 +18,38 @@ router.post('/', (req, res) => {
 })
 
 router.get('/latest', async (_req, res) => {
-  const userIds = await User.findAll({ attributes: ['id'] }).then(users => users.map(user => user.id))
+  const users = await User.findAll({ attributes: ['id', 'name'] }).then(users =>
+    users.map(user => ({
+      userId: user.id,
+      name: user.name,
+    }))
+  )
 
   const latestWorks = await Promise.all(
-    userIds.map(async userId => {
+    users.map(async ({ userId, name }) => {
       const work = await Work.findOne({
         include: [{ model: User }],
         where: { userId },
         order: [['createdAt']],
       })
 
-      return (
-        work && {
-          name: work.User.name,
-          startedAt: work.startedAt,
-          finishedAt: work.finishedAt,
-          atOffice: work.atOffice,
-          onWork: work.onWork,
+      if (!work) {
+        return {
+          name,
+          startedAt: null,
+          finishedAt: null,
+          atOffice: null,
+          onWork: null,
         }
-      )
+      }
+
+      return {
+        name: work.User.name,
+        startedAt: work.startedAt,
+        finishedAt: work.finishedAt,
+        atOffice: work.atOffice,
+        onWork: work.onWork,
+      }
     })
   )
 
