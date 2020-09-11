@@ -13,9 +13,9 @@ dayjs.extend(timezone)
 
 const indexRouter = require('./routes/index')
 const usersRouter = require('./routes/users')
-const historisRouter = require('./routes/historis')
+const historiesRouter = require('./routes/histories')
 const apiUsersRouter = require('./routes/api/users')
-const apiHistorisRouter = require('./routes/api/historis')
+const apiHistoriesRouter = require('./routes/api/histories')
 
 const app = express()
 
@@ -32,9 +32,9 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 app.use('/', indexRouter)
 app.use('/users', usersRouter)
-app.use('/historis', historisRouter)
+app.use('/historis', historiesRouter)
 app.use('/api/users', apiUsersRouter)
-app.use('/api/historis', apiHistorisRouter)
+app.use('/api/historis', apiHistoriesRouter)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
