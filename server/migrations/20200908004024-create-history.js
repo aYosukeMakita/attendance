@@ -1,7 +1,7 @@
 'use strict'
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('Works', {
+    await queryInterface.createTable('Histories', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -11,17 +11,11 @@ module.exports = {
       userId: {
         type: Sequelize.INTEGER,
       },
-      startedAt: {
-        type: Sequelize.DATE,
+      oldPresence: {
+        type: Sequelize.STRING,
       },
-      finishedAt: {
-        type: Sequelize.DATE,
-      },
-      atOffice: {
-        type: Sequelize.BOOLEAN,
-      },
-      onWork: {
-        type: Sequelize.BOOLEAN,
+      newPresence: {
+        type: Sequelize.STRING,
       },
       createdAt: {
         allowNull: false,
@@ -34,6 +28,6 @@ module.exports = {
     })
   },
   down: async queryInterface => {
-    await queryInterface.dropTable('Works')
+    await queryInterface.dropTable('Histories')
   },
 }

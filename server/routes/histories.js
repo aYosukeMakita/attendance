@@ -1,12 +1,12 @@
 const express = require('express')
 const dayjs = require('dayjs')
-const { User, Work } = require('../models')
+const { User, History } = require('../models')
 const router = express.Router()
 
 router.get('/', (_req, res) => {
-  Work.findAll({
+  History.findAll({
     include: [{ model: User }],
-  }).then(works => res.render('works', { works, dayjs }))
+  }).then(histories => res.render('histories', { histories, dayjs }))
 })
 
 module.exports = router
