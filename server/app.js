@@ -32,9 +32,9 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 app.use('/', indexRouter)
 app.use('/users', usersRouter)
-app.use('/historis', historiesRouter)
+app.use('/histories', historiesRouter)
 app.use('/api/users', apiUsersRouter)
-app.use('/api/historis', apiHistoriesRouter)
+app.use('/api/histories', apiHistoriesRouter)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
