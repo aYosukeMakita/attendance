@@ -1,5 +1,5 @@
 import { MutationTree, ActionTree } from 'vuex'
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
 import { RootState, UserState, User } from '@/store/types'
 
 const defaultState: UserState = {
@@ -8,23 +8,55 @@ const defaultState: UserState = {
 }
 
 const mutations: MutationTree<UserState> = {
-  set: (state, { users, error }: UserState) => {
-    if (users) {
-      state.users = users
-      state.error
+  setList: (state, users: User[]) => {
+    state.users = users
+    state.error = null
+  },
+  set: (state, user: User) => {
+    const found = state.users.find(u => u.id === user.id)
+    if (!found) {
+      return
     }
-    if (error) {
-      state.error = error
-    }
+    found.presence = user.presence
+    found.atOffice = user.atOffice
+  },
+  setError: (state, error: AxiosError) => {
+    state.error = error
   },
 }
 
+type UserPresenceParams = {
+  id: number
+  presence: string
+}
+type UserLocationParams = {
+  id: number
+  atOffice: boolean
+}
 const actions: ActionTree<UserState, RootState> = {
-  async getUsers({ commit }) {
+  getUsers({ commit }) {
     axios
       .get<User[]>(`${process.env.VUE_APP_API_SERVER}/api/users`)
-      .then(res => commit('set', { users: res.data }))
-      .catch(error => commit('set', { error }))
+      .then(res => commit('setList', res.data))
+      .catch(error => commit('setError', error))
+  },
+
+  setUserPresence({ commit }, params: UserPresenceParams) {
+    axios
+      .put<User[]>(`${process.env.VUE_APP_API_SERVER}/api/users/${params.id}`, {
+        presence: params.presence,
+      })
+      .then(res => commit('set', res.data))
+      .catch(error => commit('setError', error))
+  },
+
+  setUserLocation({ commit }, params: UserLocationParams) {
+    axios
+      .put<User[]>(`${process.env.VUE_APP_API_SERVER}/api/users/${params.id}`, {
+        atOffice: params.atOffice,
+      })
+      .then(res => commit('set', res.data))
+      .catch(error => commit('setError', error))
   },
 }
 

@@ -19,7 +19,7 @@ import { mapState, mapActions } from 'vuex'
 import { RootState, User } from '@/store/types'
 
 export default Vue.extend({
-  name: 'Users',
+  name: 'History',
 
   computed: {
     ...mapState({

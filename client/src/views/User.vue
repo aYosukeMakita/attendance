@@ -11,15 +11,15 @@
       <div class="d-flex justify-center">
         <div>
           <v-row class="border-bottom py-5">
+            <div class="column-icon"></div>
             <div class="column-name text-center">名前</div>
-            <div class="column-start text-center">開始時刻</div>
-            <div class="column-end text-center">終了時刻</div>
-            <div class="column-location text-center">勤務場所</div>
-            <div class="column-on-work text-center">休憩</div>
+            <div class="column-toggle text-center">状態</div>
+            <div class="column-toggle text-center">休憩</div>
+            <div class="column-toggle text-center">勤務場所</div>
           </v-row>
 
-          <div v-for="item in works" :key="item.name">
-            <work-row :work="item" />
+          <div v-for="item in users" :key="item.name">
+            <user-row :user="item" />
           </div>
         </div>
       </div>
@@ -30,30 +30,30 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState, mapActions } from 'vuex'
-import { RootState, Work } from '@/store/types'
-import WorkRow from '@/components/WorkRow.vue'
+import { RootState, User } from '@/store/types'
+import UserRow from '@/components/UserRow.vue'
 
 export default Vue.extend({
-  name: 'Works',
+  name: 'User',
 
   components: {
-    WorkRow,
+    UserRow,
   },
 
   computed: {
     ...mapState({
-      works(state: RootState): Work[] {
-        return state.works.works
+      users(state: RootState): User[] {
+        return state.users.users
       },
     }),
   },
 
   async mounted() {
-    await this.getWorks()
+    await this.getUsers()
   },
 
   methods: {
-    ...mapActions(['getWorks']),
+    ...mapActions(['getUsers']),
   },
 })
 </script>
@@ -65,19 +65,15 @@ export default Vue.extend({
 .border-bottom {
   border-bottom: solid 1px silver;
 }
+.column-icon {
+  width: 3rem;
+}
 .column-name {
   width: 12rem;
 }
-.column-start {
-  width: 8rem;
-}
-.column-end {
-  width: 8rem;
-}
-.column-location {
-  width: 12rem;
-}
-.column-on-work {
-  width: 12rem;
+.column-toggle {
+  width: 10rem;
+  display: flex;
+  justify-content: center;
 }
 </style>

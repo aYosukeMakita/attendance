@@ -1,8 +1,12 @@
 import { AxiosError } from 'axios'
 
+export type Presence = 'working' | 'finished' | 'break'
+
 export interface User {
   id: number
   name: string
+  presence: Presence
+  atOffice: boolean
 }
 
 export interface UserState {
@@ -12,10 +16,9 @@ export interface UserState {
 
 export interface Work {
   name: string
-  startedAt: string | null
-  finishedAt: string | null
-  atOffice: boolean | null
-  onWork: boolean | null
+  userId: number
+  oldPresence: string | null
+  newPresence: string | null
 }
 
 export interface WorkState {
