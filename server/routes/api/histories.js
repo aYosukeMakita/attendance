@@ -1,19 +1,19 @@
 const express = require('express')
-const { User, Work } = require('../../models')
+const { User, History } = require('../../models')
 const router = express.Router()
 
 router.get('/', (_req, res) => {
-  Work.findAll().then(works => res.send(works))
+  History.findAll().then(histories => res.send(histories))
 })
 
 router.post('/', (req, res) => {
-  Work.create({
+  History.create({
     userId: req.body.userId,
     atOffice: req.body.atOffice,
     onWork: true,
     startedAt: new Date(),
   })
-    .then(work => res.status(201).send(work))
+    .then(history => res.status(201).send(history))
     .catch(() => res.status(400).send({ message: 'bad request' }))
 })
 
@@ -25,15 +25,15 @@ router.get('/latest', async (_req, res) => {
     }))
   )
 
-  const latestWorks = await Promise.all(
+  const latestHistories = await Promise.all(
     users.map(async ({ userId, name }) => {
-      const work = await Work.findOne({
+      const history = await history.findOne({
         include: [{ model: User }],
         where: { userId },
         order: [['createdAt']],
       })
 
-      if (!work) {
+      if (!wohistoryrk) {
         return {
           name,
           startedAt: null,
@@ -53,7 +53,7 @@ router.get('/latest', async (_req, res) => {
     })
   )
 
-  const compact = latestWorks.filter(n => n)
+  const compact = latestHistories.filter(n => n)
   res.send(compact)
 })
 

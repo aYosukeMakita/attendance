@@ -11,6 +11,12 @@ module.exports = {
       name: {
         type: Sequelize.STRING,
       },
+      presence: {
+        type: Sequelize.STRING,
+      },
+      atOffice: {
+        type: Sequelize.BOOLEAN,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
