@@ -1,7 +1,13 @@
 <template>
   <v-row class="border-bottom" align="center">
-    <div class="column-icon text-right"><v-icon :color="userColor" large>mdi-account</v-icon></div>
-    <div class="column-name text-center">{{ user.name }}</div>
+    <div class="column-icon text-right">
+      <v-icon :color="userColor" large>mdi-account</v-icon>
+    </div>
+    <div class="column-name text-center">
+      <router-link :to="`/users/${user.id}/histories`">
+        {{ user.name }}
+      </router-link>
+    </div>
     <div class="column-toggle">
       <v-switch :input-value="attendant" :label="attendantText" @change="handleAttendantChange"></v-switch>
     </div>

@@ -2,8 +2,8 @@
   <v-app>
     <v-app-bar app color="primary" dark>
       <v-spacer></v-spacer>
-      <router-link to="users">
-        <v-icon>mdi-account-multiple</v-icon>
+      <router-link to="histories">
+        <v-icon>mdi-book-open-outline</v-icon>
       </router-link>
     </v-app-bar>
 
@@ -18,9 +18,13 @@
             <div class="column-toggle text-center">勤務場所</div>
           </v-row>
 
-          <div v-for="item in users" :key="item.name">
+          <div v-for="item in users" :key="item.id">
             <user-row :user="item" />
           </div>
+
+          <router-link to="/users/add">
+            <v-btn class="mt-5" color="primary" rounded>ユーザー追加</v-btn>
+          </router-link>
         </div>
       </div>
     </v-main>
@@ -64,16 +68,5 @@ export default Vue.extend({
 }
 .border-bottom {
   border-bottom: solid 1px silver;
-}
-.column-icon {
-  width: 3rem;
-}
-.column-name {
-  width: 12rem;
-}
-.column-toggle {
-  width: 10rem;
-  display: flex;
-  justify-content: center;
 }
 </style>

@@ -13,3 +13,17 @@ export default Vue.extend({
   }),
 })
 </script>
+
+<style>
+.column-icon {
+  width: 3rem;
+}
+.column-name {
+  width: 12rem;
+}
+.column-toggle {
+  width: 10rem;
+  display: flex;
+  justify-content: center;
+}
+</style>

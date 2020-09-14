@@ -41,6 +41,17 @@ const actions: ActionTree<UserState, RootState> = {
       .catch(error => commit('setError', error))
   },
 
+  addUser({ commit }, name: string) {
+    return new Promise(resolve =>
+      axios
+        .post<User[]>(`${process.env.VUE_APP_API_SERVER}/api/users`, {
+          name,
+        })
+        .then(resolve)
+        .catch(error => commit('setError', error))
+    )
+  },
+
   setUserPresence({ commit }, params: UserPresenceParams) {
     axios
       .put<User[]>(`${process.env.VUE_APP_API_SERVER}/api/users/${params.id}`, {
@@ -57,6 +68,15 @@ const actions: ActionTree<UserState, RootState> = {
       })
       .then(res => commit('set', res.data))
       .catch(error => commit('setError', error))
+  },
+
+  deleteUser({ commit }, userId: number) {
+    return new Promise(resolve =>
+      axios
+        .delete<User[]>(`${process.env.VUE_APP_API_SERVER}/api/users/${userId}`)
+        .then(resolve)
+        .catch(error => commit('setError', error))
+    )
   },
 }
 

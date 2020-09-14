@@ -11,7 +11,17 @@ const routes: Array<RouteConfig> = [
     component: User,
   },
   {
-    path: '/history',
+    path: '/users/add',
+    name: 'UserAdd',
+    component: () => import('../views/UserAdd.vue'),
+  },
+  {
+    path: '/users/:userId/histories',
+    name: 'UserHistory',
+    component: () => import('../views/UserHistory.vue'),
+  },
+  {
+    path: '/histories',
     name: 'History',
     // route level code-splitting
     // this generates a separate chunk (users.[hash].js) for this route

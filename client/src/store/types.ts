@@ -14,19 +14,20 @@ export interface UserState {
   error: AxiosError | null
 }
 
-export interface Work {
+export interface History {
   name: string
   userId: number
-  oldPresence: string | null
-  newPresence: string | null
+  oldPresence: string
+  newPresence: string
+  createdAt: string
 }
 
-export interface WorkState {
-  works: Work[]
+export interface HistoryState {
+  histories: History[]
   error: AxiosError | null
 }
 
 export interface RootState {
   users: UserState
-  works: WorkState
+  histories: HistoryState
 }
