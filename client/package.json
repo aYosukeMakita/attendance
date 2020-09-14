@@ -5,6 +5,7 @@
   "scripts": {
     "start": "vue-cli-service serve",
     "build": "vue-cli-service build",
+    "postbuild": "node postbuild.js",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
@@ -31,6 +32,7 @@
     "eslint-plugin-prettier": "^3.1.3",
     "eslint-plugin-vue": "^6.2.2",
     "prettier": "^1.19.1",
+    "rmdir2": "^2.0.6",
     "sass": "^1.19.0",
     "sass-loader": "^8.0.0",
     "typescript": "~3.9.3",
