@@ -25,5 +25,5 @@ docker-compose run --rm web npx sequelize db:create
 ### DB マイグレーション
 
 ```
-docker-compose run --rm web npx sequelize db:create
+docker-compose run --rm web npx sequelize db:migrate
 ```
