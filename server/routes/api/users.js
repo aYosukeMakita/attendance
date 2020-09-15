@@ -1,6 +1,7 @@
 const express = require('express')
 const { User, History } = require('../../models')
 const router = express.Router()
+const sendmail = require('../../lib/mailer')
 
 router.get('/', (_req, res) => {
   User.findAll({ attributes: ['id', 'name', 'presence', 'atOffice', 'updatedAt'] }).then(users => res.send(users))
@@ -69,8 +70,36 @@ router.put('/:userId', (req, res) => {
 
   User.findByPk(req.params.userId)
     .then(user => {
+      // user.update()でuserが変更されるよりも前にpresenceの変化を調べる
+      const beforePresence = user.presence
+      const afterPresence = req.body.presence
+      if (!['working', 'finished'].includes(afterPresence)) {
+        return { user, subjectType: null }
+      }
+      if (beforePresence === 'break') {
+        return { user, subjectType: null }
+      }
+
+      if (beforePresence === 'working' && afterPresence === 'finished') {
+        return { user, subjectType: '終了' }
+      } else if (beforePresence === 'finished' && afterPresence === 'working') {
+        return { user, subjectType: '開始' }
+      } else {
+        return { user, subjectType: null }
+      }
+    })
+    .then(({ user, subjectType }) => {
       createHistory(user, req.body)
-      return user.update(req.body)
+      user.update(req.body)
+      return { user, subjectType }
+    })
+    .then(({ user, subjectType }) => {
+      if (!subjectType) {
+        return user
+      }
+
+      sendmail({ user, subjectType })
+      return user
     })
     .then(user => {
       res.send({
