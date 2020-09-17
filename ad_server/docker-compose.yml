@@ -1,0 +1,30 @@
+version: '3.4'
+
+x-var: &MYSQL_USERNAME
+  "root"
+x-var: &MYSQL_ROOT_PASSWORD
+  "password"
+
+services:
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_USERNAME: *MYSQL_USERNAME
+      MYSQL_ROOT_PASSWORD: *MYSQL_ROOT_PASSWORD
+    volumes:
+      - ./tmp/mysql_data:/var/lib/mysql
+
+  web:
+    build: .
+    environment:
+      RAILS_ENV: development
+      MYSQL_USERNAME: *MYSQL_USERNAME
+      MYSQL_ROOT_PASSWORD: *MYSQL_ROOT_PASSWORD
+      RAILS_SERVE_STATIC_FILES: 1
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
+    volumes:
+      - .:/snowy
+    ports:
+      - 8080:3000
+    links:
+      - db

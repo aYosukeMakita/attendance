@@ -1,0 +1,11 @@
+<script type="text/javascript">
+  window.userId = "<%= current_user.id %>";
+  window.loginUrl = "<%= new_user_session_path %>";
+  window.logoutUrl = "<%= destroy_user_session_path %>";
+  <% if current_user.is_admin %>
+  window.isAdmin = true;
+  <% end %>
+</script>
+<div id="app"></div>
+<script src=/users/chunk-vendors.js></script>
+<script src=/users/app.js></script>

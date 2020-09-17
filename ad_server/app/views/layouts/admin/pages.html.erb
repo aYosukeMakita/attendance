@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel=icon href=favicon.ico>
+    <title>Snowy Admin</title>
+    <link rel=stylesheet href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900">
+    <link rel=stylesheet href=https://cdn.jsdelivr.net/npm/@mdi/font@latest/css/materialdesignicons.min.css>
+    <link href=/admin/app.css rel=preload as=style>
+    <link href=/admin/app.js rel=preload as=script>
+    <link href=/admin/chunk-vendors.css rel=preload as=style>
+    <link href=/admin/chunk-vendors.js rel=preload as=script>
+    <link href=/admin/chunk-vendors.css rel=stylesheet>
+    <link href=/admin/app.css rel=stylesheet>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport" />
+  </head>
+
+  <body>
+    <%= yield %>
+  </body>
+</html>
