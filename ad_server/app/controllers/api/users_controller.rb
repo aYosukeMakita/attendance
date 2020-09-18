@@ -1,23 +1,25 @@
 # frozen_string_literal: true
 
 class Api::UsersController < ApplicationController
-  # before_action :authenticate_user!
-  before_action :admin, only: [:histories]
-  before_action :set_user, only: %i[update user_histories]
+  before_action :authenticate_user!
+  before_action :admin, only: %i[histories statistics]
+  before_action :set_user, only: %i[update]
   before_action :update_params, only: [:update]
 
   def index
-    Rails.logger.debug('=============================')
-    Rails.logger.debug(current_user)
-    Rails.logger.debug('=============================')
     @users = User.all
   end
 
   def update
-    Rails.logger.debug('=============================')
-    Rails.logger.debug(current_user)
-    Rails.logger.debug('=============================')
-    render json: { message: 'update' }
+    @user.update(update_params)
+    render json: {
+      userId: @user.id,
+      username: @user.username,
+      nickname: @user.nickname,
+      isAdmin: @user.is_admin,
+      presence: @user.presence,
+      location: @user.location
+    }
   end
 
   def histories
@@ -38,7 +40,9 @@ class Api::UsersController < ApplicationController
     return render json: { message: 'user_id is required' }, status: :bad_request unless params.key?(:id)
 
     @user = User.find_by_id(params[:id])
-    render json: { message: 'user not found' }, status: :not_found if @user.nil?
+    return render json: { message: 'user not found' }, status: :not_found if @user.nil?
+
+    render json: { message: 'unauthorized' }, status: :unauthorized if @user.id != current_user.id
   end
 
   def update_params
@@ -50,6 +54,6 @@ class Api::UsersController < ApplicationController
       nickname: params[:nickname],
       presence: params[:presence],
       location: params[:location]
-    }
+    }.compact
   end
 end
