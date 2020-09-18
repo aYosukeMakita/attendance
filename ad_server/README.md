@@ -64,8 +64,13 @@ GET /api/users/{userId}/histories
       "userId": 2,
       "username": "taro.yamada",
       "nickname": "山田　太郎",
-      "oldPresence: "working",
-      "newPresence: "finished"
+      "histories": [
+        {
+          "oldPresence: "working",
+          "newPresence: "finished",
+          "time": "2020-09-18T01:43:48.000Z"
+        }
+      ]
     }
 
 ## 集計履歴取得

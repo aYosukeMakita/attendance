@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  get 'users', to: 'users/pages#show'
+  get 'contents', to: 'contents#show'
 
   devise_for :users, controllers: {
     sessions: 'users/sessions'

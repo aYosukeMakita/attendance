@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel=icon href=favicon.ico>
+    <title>Snowy</title>
+    <link rel=stylesheet href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900">
+    <link rel=stylesheet href=https://cdn.jsdelivr.net/npm/@mdi/font@latest/css/materialdesignicons.min.css>
+    <link href=/contents/app.css rel=preload as=style>
+    <link href=/contents/app.js rel=preload as=script>
+    <link href=/contents/chunk-vendors.css rel=preload as=style>
+    <link href=/contents/chunk-vendors.js rel=preload as=script>
+    <link href=/contents/chunk-vendors.css rel=stylesheet>
+    <link href=/contents/app.css rel=stylesheet>
+    <%= csp_meta_tag %>
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport" />
+    <script type="text/javascript">
+      window.userId = <%= current_user.id %>;
+      window.loginUrl = "<%= new_user_session_path %>";
+      window.logoutUrl = "<%= destroy_user_session_path %>";
+      <% if current_user.is_admin %>
+      window.isAdmin = true;
+      <% end %>
+    </script>
+  </head>
+
+  <body>
+    <div id="app"></div>
+    <%= yield %>
+  </body>
+</html>
