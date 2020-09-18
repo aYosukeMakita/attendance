@@ -1,11 +1,10 @@
 <template>
   <v-row class="border-bottom" align="center">
-    <div class="column-icon text-right">
-      <v-icon large>mdi-ribbon</v-icon>
-    </div>
-    <div class="column-name text-center">{{ item.name }}</div>
+    <div class="column-name text-center py-2">{{ name }}</div>
     <div class="column-changes">
-      {{ presenceText(item.oldPresence) }}<v-icon>mdi-arrow-right</v-icon> {{ presenceText(item.newPresence) }}
+      {{ presenceText(item.oldPresence) }}
+      <v-icon>mdi-arrow-right</v-icon>
+      {{ presenceText(item.newPresence) }}
     </div>
     <div class="column-timestamp">{{ localCreatedAt }}</div>
   </v-row>
@@ -20,14 +19,17 @@ export default Vue.extend({
   name: 'HistoryRow',
 
   props: {
+    name: {
+      type: String,
+      default: '',
+      required: true,
+    },
     item: {
       type: Object as PropType<History>,
       default: {
-        name: '',
-        userId: 0,
-        oldPresence: 'finished' as Presence,
         newPresence: 'finished' as Presence,
-        createdAt: '',
+        oldPresence: 'finished' as Presence,
+        time: '',
       },
       required: true,
     },
@@ -35,7 +37,7 @@ export default Vue.extend({
 
   computed: {
     localCreatedAt() {
-      return dayjs(this.item.createdAt).format('YYYY-MM-DD HH:mm:ss')
+      return dayjs(this.item.time).format('YYYY-MM-DD HH:mm:ss')
     },
   },
 
@@ -48,7 +50,7 @@ export default Vue.extend({
 </script>
 <style>
 .column-changes {
-  width: 18rem;
+  width: 14rem;
 }
 .column-timestamp {
   width: 14rem;

@@ -3,34 +3,33 @@ import axios from 'axios'
 import { RootState, HistoryState, History } from '@/store/types'
 
 const defaultState: HistoryState = {
+  userId: 0,
+  username: '',
+  nickname: null,
   histories: [],
   error: null,
 }
 
 const mutations: MutationTree<HistoryState> = {
-  set: (state, { histories, error }: HistoryState) => {
-    if (histories) {
-      state.histories = histories
-      state.error
+  set: (state, params: HistoryState) => {
+    if (params.histories) {
+      state.userId = params.userId
+      state.username = params.username
+      state.nickname = params.nickname
+      state.histories = params.histories
+      state.error = null
     }
-    if (error) {
-      state.error = error
+    if (params.error) {
+      state.error = params.error
     }
   },
 }
 
 const actions: ActionTree<HistoryState, RootState> = {
-  async getHistories({ commit }) {
-    axios
-      .get<History[]>(`${process.env.VUE_APP_API_SERVER}/api/histories`)
-      .then(res => commit('set', { histories: res.data }))
-      .catch(error => commit('set', { error }))
-  },
-
   async getUserHistories({ commit }, userId: number) {
     axios
       .get<History[]>(`${process.env.VUE_APP_API_SERVER}/api/users/${userId}/histories`)
-      .then(res => commit('set', { histories: res.data }))
+      .then(res => commit('set', { ...res.data }))
       .catch(error => commit('set', { error }))
   },
 }

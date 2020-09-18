@@ -2,35 +2,26 @@
   <v-app>
     <v-app-bar app color="primary" dark>
       <v-spacer></v-spacer>
-      <router-link to="/">
+      <router-link class="mr-3" to="/">
         <v-icon>mdi-account-multiple</v-icon>
       </router-link>
-      <v-icon class="ml-3" @click="dialog = true">mdi-trash-can-outline</v-icon>
+      <a href="/users/sign-out">
+        <v-icon>mdi-logout-variant</v-icon>
+      </a>
     </v-app-bar>
 
     <v-main>
-      <div v-for="history in histories" :key="history.newPresence + history.createdAt">
-        <history-row :item="history" />
+      <div class="d-flex justify-center">
+        <div>
+          <div class="my-5">
+            TODO: ニックネーム編集
+          </div>
+          <div v-for="history in histories" :key="history.newPresence + history.time">
+            <history-row :name="name" :item="history" />
+          </div>
+        </div>
       </div>
     </v-main>
-
-    <v-dialog v-model="dialog" max-width="290">
-      <v-card class="pt-5">
-        <v-card-text> ユーザーを削除してよろしいですか？ </v-card-text>
-
-        <v-card-actions>
-          <v-spacer></v-spacer>
-
-          <v-btn color="red darken-1" text @click="dialog = false">
-            いいえ
-          </v-btn>
-
-          <v-btn color="primary darken-1" text @click="handleDialogClick">
-            はい
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
   </v-app>
 </template>
 
@@ -53,6 +44,9 @@ export default Vue.extend({
 
   computed: {
     ...mapState({
+      name(state: RootState): string {
+        return state.histories.nickname || state.histories.username
+      },
       histories(state: RootState): History[] {
         return state.histories.histories
       },
@@ -68,12 +62,7 @@ export default Vue.extend({
   },
 
   methods: {
-    ...mapActions(['getUserHistories', 'deleteUser']),
-
-    async handleDialogClick() {
-      await this.deleteUser(this.userId).then(() => this.$router.push('/'))
-      this.dialog = false
-    },
+    ...mapActions(['getUserHistories']),
   },
 })
 </script>

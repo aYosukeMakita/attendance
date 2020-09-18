@@ -1,12 +1,14 @@
 import { AxiosError } from 'axios'
 
 export type Presence = 'working' | 'finished' | 'break'
+export type Location = 'office' | 'home'
 
 export interface User {
-  id: number
-  name: string
+  userId: number
+  username: string
+  nickname: string | null
   presence: Presence
-  atOffice: boolean
+  location: Location
 }
 
 export interface UserState {
@@ -15,14 +17,15 @@ export interface UserState {
 }
 
 export interface History {
-  name: string
-  userId: number
-  oldPresence: string
-  newPresence: string
-  createdAt: string
+  oldPresence: Presence
+  newPresence: Presence
+  time: string
 }
 
 export interface HistoryState {
+  userId: number
+  username: string
+  nickname: string | null
   histories: History[]
   error: AxiosError | null
 }

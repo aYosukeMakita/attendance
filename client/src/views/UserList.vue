@@ -2,9 +2,9 @@
   <v-app>
     <v-app-bar app color="primary" dark>
       <v-spacer></v-spacer>
-      <router-link to="histories">
-        <v-icon>mdi-book-open-outline</v-icon>
-      </router-link>
+      <a href="/users/sign-out">
+        <v-icon>mdi-logout-variant</v-icon>
+      </a>
     </v-app-bar>
 
     <v-main>
@@ -21,10 +21,6 @@
           <div v-for="item in users" :key="item.id">
             <user-row :user="item" />
           </div>
-
-          <router-link to="/users/add">
-            <v-btn class="mt-5" color="primary" rounded>ユーザー追加</v-btn>
-          </router-link>
         </div>
       </div>
     </v-main>
@@ -38,7 +34,7 @@ import { RootState, User } from '@/store/types'
 import UserRow from '@/components/UserRow.vue'
 
 export default Vue.extend({
-  name: 'User',
+  name: 'UserList',
 
   components: {
     UserRow,

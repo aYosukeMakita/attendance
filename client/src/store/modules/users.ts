@@ -1,6 +1,6 @@
 import { MutationTree, ActionTree } from 'vuex'
 import axios, { AxiosError } from 'axios'
-import { RootState, UserState, User } from '@/store/types'
+import { RootState, UserState, User, Presence, Location } from '@/store/types'
 
 const defaultState: UserState = {
   users: [],
@@ -13,25 +13,30 @@ const mutations: MutationTree<UserState> = {
     state.error = null
   },
   set: (state, user: User) => {
-    const found = state.users.find(u => u.id === user.id)
+    const found = state.users.find(u => u.userId === user.userId)
     if (!found) {
       return
     }
+    found.nickname = user.nickname
     found.presence = user.presence
-    found.atOffice = user.atOffice
+    found.location = user.location
   },
   setError: (state, error: AxiosError) => {
     state.error = error
   },
 }
 
+type UserNicknameParams = {
+  userId: number
+  nickname: string
+}
 type UserPresenceParams = {
-  id: number
-  presence: string
+  userId: number
+  presence: Presence
 }
 type UserLocationParams = {
-  id: number
-  atOffice: boolean
+  userId: number
+  location: Location
 }
 const actions: ActionTree<UserState, RootState> = {
   getUsers({ commit }) {
@@ -41,20 +46,18 @@ const actions: ActionTree<UserState, RootState> = {
       .catch(error => commit('setError', error))
   },
 
-  addUser({ commit }, name: string) {
-    return new Promise(resolve =>
-      axios
-        .post<User[]>(`${process.env.VUE_APP_API_SERVER}/api/users`, {
-          name,
-        })
-        .then(resolve)
-        .catch(error => commit('setError', error))
-    )
+  setUserNickname({ commit }, params: UserNicknameParams) {
+    axios
+      .put<User[]>(`${process.env.VUE_APP_API_SERVER}/api/users/${params.userId}`, {
+        nickname: params.nickname,
+      })
+      .then(res => commit('set', res.data))
+      .catch(error => commit('setError', error))
   },
 
   setUserPresence({ commit }, params: UserPresenceParams) {
     axios
-      .put<User[]>(`${process.env.VUE_APP_API_SERVER}/api/users/${params.id}`, {
+      .put<User[]>(`${process.env.VUE_APP_API_SERVER}/api/users/${params.userId}`, {
         presence: params.presence,
       })
       .then(res => commit('set', res.data))
@@ -63,20 +66,11 @@ const actions: ActionTree<UserState, RootState> = {
 
   setUserLocation({ commit }, params: UserLocationParams) {
     axios
-      .put<User[]>(`${process.env.VUE_APP_API_SERVER}/api/users/${params.id}`, {
-        atOffice: params.atOffice,
+      .put<User[]>(`${process.env.VUE_APP_API_SERVER}/api/users/${params.userId}`, {
+        location: params.location,
       })
       .then(res => commit('set', res.data))
       .catch(error => commit('setError', error))
-  },
-
-  deleteUser({ commit }, userId: number) {
-    return new Promise(resolve =>
-      axios
-        .delete<User[]>(`${process.env.VUE_APP_API_SERVER}/api/users/${userId}`)
-        .then(resolve)
-        .catch(error => commit('setError', error))
-    )
   },
 }
 
