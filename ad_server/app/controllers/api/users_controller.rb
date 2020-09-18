@@ -1,37 +1,34 @@
 # frozen_string_literal: true
 
 class Api::UsersController < ApplicationController
-  # before_action :sign_in_required
-  before_action :authenticate_user!
+  # before_action :authenticate_user!
   before_action :admin, only: [:histories]
   before_action :set_user, only: %i[update user_histories]
   before_action :update_params, only: [:update]
 
   def index
+    Rails.logger.debug('=============================')
+    Rails.logger.debug(current_user)
+    Rails.logger.debug('=============================')
     @users = User.all
   end
 
   def update
-    render json: { message: 'OK' }
+    Rails.logger.debug('=============================')
+    Rails.logger.debug(current_user)
+    Rails.logger.debug('=============================')
+    render json: { message: 'update' }
   end
 
   def histories
-    render json: { message: 'OK' }
+    render json: { message: 'histories' }
   end
 
-  def user_histories
-    render json: { message: 'OK' }
+  def statistics
+    render json: { message: 'statistics' }
   end
 
   private
-
-  def sign_in_required
-    Rails.logger.debug('===================================')
-    Rails.logger.debug(current_user)
-    Rails.logger.debug(user_signed_in?)
-    Rails.logger.debug('===================================')
-    render body: '', status: :unauthorized unless user_signed_in?
-  end
 
   def admin
     render body: '', status: :unauthorized unless current_user.is_admin

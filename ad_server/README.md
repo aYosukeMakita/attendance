@@ -1,207 +1,87 @@
-# snowy
+# ユーザー管理 API
 
-ユーザー情報管理
+ユーザーの登録はログインに成功した時点で自動的に行われるため不要
 
-ユーザーの登録はログインに成功した時点で自動的に行われる。
+## 一覧取得
 
-## ユーザー登録
-
-### Request
-
-新規ユーザーの場合
-
-    POST /api/users
-
-Body
-
-    {
-      "timestamp": "2020-05-12T09:12:38+09:00",
-      "temperature: 36.3,
-      "condition": "良い",
-      "symptoms": "なし",
-      "description": ""
-    }
-
-### Response
-
-    {
-      "userId": "kfd9WltSB64eVXAylCiS7cN14tovTVc-AA1Y8I-14CI",
-      "dataId": 3,
-      "timestamp": "2020-05-12T00:12:38Z",
-      "temperature: 36.3,
-      "condition": "良い",
-      "symptoms": "なし",
-      "description": ""
-    }
-
-## データ取得(リスト)
-
-直近のデータをまとめて返す
+ユーザーの状態をまとめて返す。
+個別に返す API はないので特定のユーザーの情報が欲しい場合でも一覧を呼ぶ必要がある。
 
 ### Request
 
-    GET /api/users/{userId}/health_data?offset=20&limit=10
-
-Parameters
-
-| パラメーター | 説明                         | デフォルト値 |
-| ------------ | ---------------------------- | ------------ |
-| offset       | 先頭からのオフセット         | 0            |
-| limit        | レスポンスに含まれる最大件数 | 10           |
-
-### Response
-
-    {
-      "userId": 2,
-      "data": [
-        {
-          "dataId": 3,
-          "timestamp": "2020-05-12T00:12:38Z",
-          "temperature: 36.3,
-          "condition": "良い",
-          "symptoms": "なし",
-          "description": ""
-        },
-        {
-          "dataId": 4,
-          "timestamp": "2020-05-12T01:31:55Z",
-          "temperature: 38.2,
-          "condition": "悪い",
-          "symptoms": "あり",
-          "description": "発熱\n咳\n倦怠感\n味がしない"
-        }
-      ],
-      "offset": 20,
-      "limit": 10,
-      "total": 120
-    }
-
-## データ取得
-
-指定されたデータを返す
-
-### Request
-
-    GET /api/users/{userId}/health_data/{dataId}
-
-### Response
-
-    {
-      "userId": 2,
-      "dataId": 3,
-      "timestamp": "2020-05-12T00:12:38Z",
-      "temperature: 36.3,
-      "condition": "良い",
-      "symptoms": "なし",
-      "description": ""
-    }
-
-## データ変更
-
-指定されたデータを変更する。
-Body に存在するパラメーターのみ更新するので、更新が不要なパラメーターは BODY 含めなくても良い。
-
-### Request
-
-    PUT /api/users/{userId}/health_data/{dataId}
-
-Body
-
-    {
-      "timestamp": "2020-05-12T09:12:38+09:00",
-      "temperature: 36.3,
-      "condition": "良い",
-      "symptoms": "なし",
-      "description": ""
-    }
-
-### Response
-
-    {
-      "userId": 2,
-      "dataId": 3,
-      "timestamp": "2020-05-12T00:12:38Z",
-      "temperature: 36.3,
-      "condition": "良い",
-      "symptoms": "なし",
-      "description": ""
-    }
-
-## 全ユーザーの最新情報取得
-
-全ユーザーの最新情報を取得する。管理者用 API。
-
-### Request
-
-    GET /admin/latest_health_data
+GET /api/users
 
 ### Response
 
     [
       {
-        "userId": 2,
-        "dataId": 3,
-        "timestamp": "2020-05-12T00:12:38Z",
-        "temperature: 36.3,
-        "condition": "良い",
-        "symptoms": "なし",
-        "description": ""
-      },
-      {
-        "userId": 3,
-        "dataId": 8,
-        "timestamp": "2020-05-11T23:58:20Z",
-        "temperature: 37.9,
-        "condition": "悪い",
-        "symptoms": "あり",
-        "description": "熱"
+        "userId": 5,
+        "username": "taro.yamada",
+        "nickname": "山田　太郎",
+        "isAdmin": true,
+        "presence: "working",
+        "location": "office"
       }
     ]
 
-## 全健康データ情報取得
+## 変更
 
-全健康データを取得する。管理者用 API。
+ユーザーの情報を変更する
 
 ### Request
 
-    GET /admin/health_data
+PUT /api/users/{userId}
 
-Parameters
+    {
+      "nickname": "山田　太郎",
+      "presence: "working",
+      "location": "office"
+    }
 
-| パラメーター   | 説明                                                                    | 例                   |
-| -------------- | ----------------------------------------------------------------------- | -------------------- |
-| userId         | フィルター。ユーザー ID                                                 | abcd                 |
-| timestamp_from | フィルター。日時の開始時刻                                              | 2020-05-18T08:10:06Z |
-| timestamp_to   | フィルター。日時の終了時刻                                              | 2020-05-18T10:10:06Z |
-| temperature_ge | フィルター。体温の下限                                                  | 36.5                 |
-| temperature_le | フィルター。体温の上限                                                  | 38.5                 |
-| condition      | フィルター。体調                                                        | 良い                 |
-| symptoms       | フィルター。自覚症状                                                    | あり                 |
-| description    | フィルター。自覚症状詳細。部分一致                                      | 熱                   |
-| sort_by        | ソート。["userId", "timestamp", "temperature", "condition", "symptoms"] |
-| order          | ソート。["acs", "desc"]。デフォルトは asc。                             |
-| offset         | 先頭からのオフセット                                                    | 0                    |
-| limit          | レスポンスに含まれる最大件数                                            | 10                   |
+### Response
+
+    {
+      "userId": 5,
+      "username": "taro.yamada",
+      "nickname": "山田　太郎",
+      "isAdmin": true,
+      "presence: "working",
+      "location": "office"
+    }
+
+## 履歴取得
+
+指定されたユーザーの変更履歴を返す。
+返すのは出勤と退勤の切り替わるタイミングの記録のみ。
+
+### Request
+
+GET /api/users/{userId}/histories
+
+### Response
+
+    {
+      "userId": 2,
+      "username": "taro.yamada",
+      "nickname": "山田　太郎",
+      "oldPresence: "working",
+      "newPresence: "finished"
+    }
+
+## 集計履歴取得
+
+指定されたユーザーの 1 か月分の履歴を返す
+
+### Request
+
+GET /api/users/{userId}/statistics
 
 ### Response
 
     [
       {
-        "userId": 2,
-        "dataId": 3,
-        "timestamp": "2020-05-12T00:12:38Z",
-        "temperature: 36.3,
-        "condition": "良い",
-        "symptoms": "なし",
-        "description": ""
-      },
-      {
-        "userId": 3,
-        "dataId": 8,
-        "timestamp": "2020-05-11T23:58:20Z",
-        "temperature: 37.9,
-        "condition": "悪い",
-        "symptoms": "あり",
-        "description": "熱"
+        "date": "2020-09-18",
+        "start": "2020-09-18T09:02:23+09:00",
+        "end": "2020-09-18T17:37:50+09:00","
       }
     ]

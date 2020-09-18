@@ -21,8 +21,8 @@ ActiveRecord::Schema.define(version: 2020_06_09_003247) do
     t.string "last_sign_in_ip"
     t.string "nickname"
     t.boolean "is_admin", default: false
-    t.string "presence"
-    t.string "location"
+    t.string "presence", default: "finished"
+    t.string "location", default: "home"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["username"], name: "index_users_on_username", unique: true

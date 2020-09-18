@@ -15,10 +15,12 @@ Rails.application.routes.draw do
 
   namespace :api do
     defaults format: :json do
-      resources :users, only: %i[index update]
+      #      resources :users, only: %i[index update]
+      get '/users', to: 'users#index'
+      put '/users/:id', to: 'users#update'
 
-      get '/users/histories', to: 'users#histories'
-      get '/users/:id/histories', to: 'users#user_histories'
+      get '/users/:id/histories', to: 'users#histories'
+      get '/users/:id/statistics', to: 'users#statistics'
     end
   end
 end

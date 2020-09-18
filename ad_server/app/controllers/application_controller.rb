@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ApplicationController < ActionController::Base
-  protect_from_forgery with: :null_session
+  skip_before_action :verify_authenticity_token
 
   rescue_from DeviseLdapAuthenticatable::LdapException do |exception|
     render text: exception, status: 500
