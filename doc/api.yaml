@@ -1,0 +1,385 @@
+openapi: 3.0.0
+info:
+  version: "1.0"
+  title: Attendance API 仕様書
+
+tags:
+  - name: Users API
+    description: ユーザー情報 API
+
+paths:
+  /api/users:
+    get:
+      x-swagger-router-controller: echo
+      description: 全ユーザーの最新の状態の取得
+      operationId: get_users
+      tags:
+        - Users API
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/User"
+        500:
+          description: 予期せぬ例外が発生したときのエラー
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+        502:
+          description: サーバーが起動していないときのエラー
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadGatewayError"
+        503:
+          description: サーバーとの通信に失敗したときのエラー
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ServiceUnavailableError"
+  /api/users/{userId}:
+    put:
+      x-swagger-router-controller: echo
+      description: ユーザーの状態の変更
+      operationId: put_user
+      tags:
+        - Users API
+      parameters:
+        - in: path
+          required: true
+          name: userId
+          description: ユーザーID
+          schema:
+            type: number
+          example: 3
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nickname:
+                  type: string
+                  description: 表示名
+                  example: "山田太郎"
+                presence:
+                  type: string
+                  pattern: ^[1-5][0-9]{2}$
+                  description: 現在の状態
+                  enum: [working, finished, break]
+                  nullable: true
+                location:
+                  type: string
+                  description: 働いている場所
+                  enum: [office, home]
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        400:
+          description: リクエストが誤っているときのエラー
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        404:
+          description: リソースが見つからないときのエラー
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundError"
+        500:
+          description: 予期せぬ例外が発生したときのエラー
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+        502:
+          description: ESFが起動していないときのエラー
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadGatewayError"
+        503:
+          description: ESFとの通信に失敗したときのエラー
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ServiceUnavailableError"
+  /api/users/{userId}/histories:
+    get:
+      x-swagger-router-controller: echo
+      description: ユーザーの状態の変更履歴取得
+      operationId: get_histories
+      tags:
+        - Users API
+      parameters:
+        - in: path
+          required: true
+          name: userId
+          description: ユーザーID
+          schema:
+            type: number
+          example: 3
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  userId:
+                    type: number
+                    description: 識別用ID
+                    example: 3
+                  username:
+                    type: string
+                    description: ActiveDirectoryのユーザー名
+                    example: taro.yamada
+                  nickname:
+                    type: string
+                    description: 表示名
+                    example: "山田太郎"
+                  histories:
+                    type: array
+                    items:
+                      properties:
+                        oldPresence:
+                          type: string
+                          description: 変更前の状態
+                          enum: [working, finished, break]
+                        newPresence:
+                          type: string
+                          description: 変更後の状態
+                          enum: [working, finished, break]
+                          example: finished
+                        time:
+                          type: string
+                          description: 変更時刻
+                          example: 2020-10-08T08:32:16Z
+                      required:
+                        - oldPresence
+                        - newPresence
+                        - time
+                required:
+                  - userId
+                  - username
+                  - nickname
+                  - histories
+        400:
+          description: リクエストが誤っているときのエラー
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        404:
+          description: リソースが見つからないときのエラー
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundError"
+        500:
+          description: 予期せぬ例外が発生したときのエラー
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+        502:
+          description: ESFが起動していないときのエラー
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadGatewayError"
+        503:
+          description: ESFとの通信に失敗したときのエラー
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ServiceUnavailableError"
+  /api/users/{userId}/statistics:
+    get:
+      x-swagger-router-controller: echo
+      description: 勤務時間の統計情報
+      operationId: get_statistics
+      tags:
+        - Users API
+      parameters:
+        - in: path
+          required: true
+          name: userId
+          description: ユーザーID
+          schema:
+            type: number
+          example: 3
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  userId:
+                    type: number
+                    description: 識別用ID
+                    example: 3
+                  username:
+                    type: string
+                    description: ActiveDirectoryのユーザー名
+                    example: taro.yamada
+                  nickname:
+                    type: string
+                    description: 表示名
+                    example: "山田太郎"
+                  statistics:
+                    type: array
+                    items:
+                      properties:
+                        date:
+                          type: string
+                          description: 勤務日時
+                          example: '2020-10-21'
+                        startedAt:
+                          type: string
+                          description: 勤務開始時間
+                          example: 2020-10-21T00:03:20Z
+                        finishedAt:
+                          type: string
+                          description: 勤務終了時間
+                          example: 2020-10-21T08:45:34Z
+                        duration:
+                          type: string
+                          description: 変更時刻
+                          example: '07:45:14'
+                      required:
+                        - date
+                        - startedAt
+                        - finishedAt
+                        - duration
+                required:
+                  - userId
+                  - username
+                  - nickname
+                  - statistics
+        400:
+          description: リクエストが誤っているときのエラー
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        404:
+          description: リソースが見つからないときのエラー
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundError"
+        500:
+          description: 予期せぬ例外が発生したときのエラー
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+        502:
+          description: ESFが起動していないときのエラー
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadGatewayError"
+        503:
+          description: ESFとの通信に失敗したときのエラー
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ServiceUnavailableError"
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        userId:
+          type: number
+          description: 識別用ID
+          example: 3
+        username:
+          type: string
+          description: ActiveDirectoryのユーザー名
+          example: taro.yamada
+        nickname:
+          type: string
+          description: 表示名
+          example: "山田太郎"
+        isAdmin:
+          type: boolean
+          description: 管理者権限を持っているか
+          example: true
+        presence:
+          type: string
+          description: 現在の状態
+          enum: [working, finished, break]
+        location:
+          type: string
+          description: 働いている場所
+          enum: [office, home]
+      required:
+        - userId
+        - username
+        - nickname
+        - isAdmin
+        - presence
+        - location
+    BadRequestError:
+      type: object
+      properties:
+        code:
+          type: string
+          example: "400"
+        message:
+          type: string
+          example: "Invalid parameter"
+    NotFoundError:
+      type: object
+      properties:
+        code:
+          type: string
+          example: "404"
+        message:
+          type: string
+          example: "Resource not found"
+    InternalServerError:
+      type: object
+      properties:
+        code:
+          type: string
+          example: "500"
+        message:
+          type: string
+          example: "Internal Server Error"
+    BadGatewayError:
+      type: object
+      properties:
+        code:
+          type: string
+          example: "502"
+        message:
+          type: string
+          example: "Bad Gateway"
+    ServiceUnavailableError:
+      type: object
+      properties:
+        code:
+          type: string
+          example: "503"
+        message:
+          type: string
+          example: "Service Unavailable"
