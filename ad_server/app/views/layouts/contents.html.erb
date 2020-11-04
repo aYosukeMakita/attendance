@@ -1,30 +1,27 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <link rel=icon href=favicon.ico>
-    <title>Snowy</title>
-    <link rel=stylesheet href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900">
-    <link rel=stylesheet href=https://cdn.jsdelivr.net/npm/@mdi/font@latest/css/materialdesignicons.min.css>
-    <link href=/contents/app.css rel=preload as=style>
-    <link href=/contents/app.js rel=preload as=script>
-    <link href=/contents/chunk-vendors.css rel=preload as=style>
-    <link href=/contents/chunk-vendors.js rel=preload as=script>
-    <link href=/contents/chunk-vendors.css rel=stylesheet>
-    <link href=/contents/app.css rel=stylesheet>
-    <%= csp_meta_tag %>
-    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport" />
-    <script type="text/javascript">
-      window.userId = <%= current_user.id %>;
-      window.loginUrl = "<%= new_user_session_path %>";
-      window.logoutUrl = "<%= destroy_user_session_path %>";
-      <% if current_user.is_admin %>
-      window.isAdmin = true;
-      <% end %>
-    </script>
-  </head>
-
-  <body>
-    <div id="app"></div>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="icon" href="/favicon.ico">
+    <title>client</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@latest/css/materialdesignicons.min.css">
     <%= yield %>
+    <link href="/css/chunk-1ccbffb3.css" rel="prefetch">
+    <link href="/js/chunk-1ccbffb3.js" rel="prefetch">
+    <link href="/css/app.css" rel="preload" as="style">
+    <link href="/css/chunk-vendors.css" rel="preload" as="style">
+    <link href="/js/app.js" rel="preload" as="script">
+    <link href="/js/chunk-vendors.js" rel="preload" as="script">
+    <link href="/css/chunk-vendors.css" rel="stylesheet">
+    <link href="/css/app.css" rel="stylesheet">
+  </head>
+  <body>
+    <noscript><strong>We're sorry but client doesn't work properly without JavaScript enabled. Please enable it to continue.</strong></noscript>
+    <div id="app"></div>
+    <script src="/js/chunk-vendors.js"></script>
+    <script src="/js/app.js"></script>
   </body>
 </html>

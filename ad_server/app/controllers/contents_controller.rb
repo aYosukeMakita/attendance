@@ -4,7 +4,7 @@ class ContentsController < ApplicationController
   # before_action :sign_in_required
 
   def show
-    redirect_to '/contents#/'
+    @user_id = current_user.id
   end
 
   private
