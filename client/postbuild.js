@@ -1,10 +1,6 @@
+/* eslint @typescript-eslint/no-var-requires: 0 */
 const fs = require('fs')
-const rmdir2 = require('rmdir2')
-const destination = '../ad_server/public'
+const destination = '../ad_server/public/contents'
 
-rmdir2(destination, err => {
-  if (err) {
-    return
-  }
-  fs.rename('dist', destination, () => {})
-})
+fs.rmdirSync(destination, { recursive: true })
+fs.rename('dist', destination, () => ({}))

@@ -1,9 +1,11 @@
 # frozen_string_literal: true
 
 class ContentsController < ApplicationController
-  before_action :sign_in_required
+  # before_action :sign_in_required
 
-  def show; end
+  def show
+    redirect_to '/contents#/'
+  end
 
   private
 

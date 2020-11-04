@@ -2,7 +2,7 @@
   <v-app>
     <v-app-bar app color="primary" dark>
       <v-spacer></v-spacer>
-      <a href="/users/sign-out">
+      <a href="/users/sign_out">
         <v-icon>mdi-logout-variant</v-icon>
       </a>
     </v-app-bar>
@@ -30,6 +30,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState, mapActions } from 'vuex'
+import { AxiosError } from 'axios'
 import { RootState, User } from '@/store/types'
 import UserRow from '@/components/UserRow.vue'
 
@@ -45,7 +46,19 @@ export default Vue.extend({
       users(state: RootState): User[] {
         return state.users.users
       },
+      error(state: RootState): AxiosError | null {
+        return state.users.error
+      },
     }),
+  },
+
+  watch: {
+    error(err) {
+      if (err && err.response && err.response.status === 401) {
+        window.location.href = '/users/sign_in'
+        return
+      }
+    },
   },
 
   async mounted() {
