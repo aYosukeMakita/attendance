@@ -1,7 +1,7 @@
 /* eslint @typescript-eslint/no-var-requires: 0 */
 const fs = require('fs')
-const jsDest = '../ad_server/public/js'
-const cssDest = '../ad_server/public/css'
+const jsDest = '../server/public/js'
+const cssDest = '../server/public/css'
 
 fs.rmdirSync(jsDest, { recursive: true })
 fs.rmdirSync(cssDest, { recursive: true })
