@@ -5,7 +5,7 @@
       <router-link class="mr-3" to="/">
         <v-icon>mdi-account-multiple</v-icon>
       </router-link>
-      <a href="/users/sign-out">
+      <a href="/users/sign_out">
         <v-icon>mdi-logout-variant</v-icon>
       </a>
     </v-app-bar>

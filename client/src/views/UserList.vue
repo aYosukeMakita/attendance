@@ -2,7 +2,7 @@
   <v-app>
     <v-app-bar app color="primary" dark>
       <v-spacer></v-spacer>
-      <a href="/users/sign-out">
+      <a href="/users/sign_out">
         <v-icon>mdi-logout-variant</v-icon>
       </a>
     </v-app-bar>
